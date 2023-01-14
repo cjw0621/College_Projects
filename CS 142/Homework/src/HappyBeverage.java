@@ -1,5 +1,3 @@
-import java.math.*;
-
 public class HappyBeverage {
 
     public static void main(String[] args) {
