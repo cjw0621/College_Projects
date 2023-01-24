@@ -1,5 +1,6 @@
 // Chase Whitney
 public class BakingCalculator {
+
     public static void main(String[] args) {
             int[] cookieCounts = { 24, 39, 80, 96, 97, 9000 };
             int[] loafCounts = { 1, 1, 8, 10, 10, 100 };
