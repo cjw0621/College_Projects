@@ -5,6 +5,9 @@ public class LineSegment {
     private int x2;
     private int y2;
 
+    // we could replace x1, y1 with a point object and call it p1
+    // we could replace x2, y2 with a point object and call it p2
+
     public LineSegment(int x1, int y1, int x2, int y2) {
         this.x1 = x1;
         this.y1 = y1;
