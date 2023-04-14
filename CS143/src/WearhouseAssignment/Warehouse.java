@@ -30,30 +30,30 @@ public class Warehouse{
         int received = 0;
         int inStockItem = 0;
 
-        for(int i = 0; i < warehouse.length; i++){
+        for(int i = 0; i < getSize(); i++){
             if(warehouse[i]== itemCode){
                 inStockItem++;
             }
         }
 
-
         for(int i = 0; i < getSize(); i++){
-            //have we already received the full shipment?
-            //does this index contain an empty space
-            if(itemCount == received || (itemCount - inStockItem) == received){
+            if(inStockItem > 0){
+                if(received + inStockItem == getLimitPerItem()){
+                    break;
+                }
+            }else if(received == getLimitPerItem()){
                 break;
             }
+
             if(warehouse[i] == 0){
                 warehouse[i] = itemCode;
                 received++;
-                //stops adding pallets to the warehouse array if either the limit was reached or if there is no more
-                //space available.
-                if(received == getLimitPerItem()){
-                    break;
-                }
             }
         }
-        return itemCount - received;
+
+
+
+        return received - itemCount;
 
     }
 
