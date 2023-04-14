@@ -30,6 +30,7 @@ public class Warehouse{
         int received = 0;
         int inStockItem = 0;
 
+        //checks if an itemCode is present in the warehouse inventory, adds 1 to the inStockItem counter if true.
         for(int i = 0; i < getSize(); i++){
             if(warehouse[i]== itemCode){
                 inStockItem++;
@@ -37,11 +38,15 @@ public class Warehouse{
         }
 
         for(int i = 0; i < getSize(); i++){
-            if(inStockItem > 0){
-                if(received + inStockItem == getLimitPerItem()){
-                    break;
-                }
-            }else if(received == getLimitPerItem()){
+            //have we already received the full shipment?
+            //does this index contain an empty space
+
+            //stops adding pallets to the warehouse inventory if either the limit was reached or if there is no more
+            //space available.
+            if(received + inStockItem == getLimitPerItem()){
+                break;
+            }
+            if(itemCount == received){
                 break;
             }
 
@@ -52,9 +57,7 @@ public class Warehouse{
         }
 
 
-
-        return received - itemCount;
-
+        return itemCount - received;
     }
 
     /*
@@ -75,31 +78,41 @@ public class Warehouse{
         int numOfItem = 0;
         int palletsShipped = 0;
 
-        for(int i = 0; i < warehouse.length; i++){
+
+        //checks if an itemCode is present in the warehouse inventory, adds 1 to the numOfItem counter if true.
+        for(int i = 0; i < getSize(); i++){
             if(warehouse[i] == itemCode){
                 numOfItem++;
             }
         }
 
+        //boolean checks if there are more than or equal to the number of items requested to ship to prevent negative
+        // values
         if(numOfItem >= itemCount){
-            for(int i = 0; i < warehouse.length; i++){
+            for(int i = 0; i < getSize(); i++){
                 if(palletsShipped == itemCount){
                     break;
                 }
 
+                //adds one to the counter if a pallet with itemCode was found and shipped
+                //replaces the itemCode with a 0 to indicate that the space is empty.
                 if(warehouse[i]== itemCode){
                     warehouse[i] = 0;
                     palletsShipped++;
                 }
             }
+            //return value indicates that the number of requested pallets has been shipped
             return itemCount;
         }
 
-       for(int i = 0; i < warehouse.length; i++){
+        //replaces the itemCodes of the items that were shipped to 0 to indicate an empty space.
+       for(int i = 0; i < getSize(); i++){
            if(warehouse[i] == itemCode){
                warehouse[i] = 0;
            }
        }
+
+       //return values indicates all the pallets in the warehouse inventory with the item code has been shipped.
         return numOfItem;
     }
 }
