@@ -30,8 +30,15 @@ public class Warehouse{
     public int receive(int itemCode, int itemCount){
 
         int received = 0;
+        int inStock = 0;
 
-        for(int i = 0; i < size; i++) {
+        for(int i = 0; i < this.size; i++) {
+            if(warehouse[i]==itemCode){
+                inStock ++;
+            }
+        }
+
+        for(int i = 0; i < this.size; i++) {
 
             if (itemCount == received) {
                 break;
@@ -46,7 +53,7 @@ public class Warehouse{
         System.out.println(Arrays.toString(warehouse));
 
 
-        return itemCount - received;
+        return -1;
     }
 
     public int ship(int itemCode, int itemCount){
