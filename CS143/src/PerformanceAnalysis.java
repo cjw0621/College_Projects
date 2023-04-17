@@ -46,6 +46,7 @@ public class PerformanceAnalysis {
          * the relationship between input size and time is linear
          *
          * doubling the size will double the time it takes to run
+         * O(n)
          */
         public static long sum(int[] a) {
             long sum = 0;
@@ -60,6 +61,8 @@ public class PerformanceAnalysis {
          * if x is not an element in a, return -1;
          * fi({1,2,3}, 2) => 1
          * find({1,2,3), 6) => -1
+         *
+         * O(n)
          *
          */
 
@@ -76,6 +79,8 @@ public class PerformanceAnalysis {
          * head(int[] a) returns the first element in an array
          *
          * constant time, doubling the length of the array does not increase the time
+         *
+         * O(1)
          */
         public static int head(int[] a) {
             if(a.length == 0)
@@ -91,6 +96,8 @@ public class PerformanceAnalysis {
          * returns false if all the elements in "a" are unique
          *
          * the relationship between input size and time is quadratic
+         *
+         * O(n^2) because of the nested for loops
          */
         public static boolean containsDuplicates(int[] a) {
             for(int i = 0; i < a.length; i++) {
@@ -102,5 +109,20 @@ public class PerformanceAnalysis {
             }
             return false;
         }
+
+        /*
+         * print1to10 prints the numbers between 1 and 10 each on their own line
+         *
+         * constant time because the loop always runs 10 times.
+         *
+         * O(1)
+         */
+    public static void print1To10() {
+        int i = 1;
+        while(i <= 10){
+            System.out.println(i);
+            i++;
+        }
+    }
 
 }
