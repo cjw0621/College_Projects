@@ -60,7 +60,11 @@ public class intArrayList {
     /*
      * add(int a) returns nothing, only adds an element to array a at n length
      *
-     * non-constant time O(N)
+     * non-constant time O(N) worst case
+     *
+     * best case: O(1)
+     *
+     * Overall, we could classify our add method as being no worse than O(n)
      */
     public void add(int a){
 //      Non-constant time of the add method
@@ -86,6 +90,33 @@ public class intArrayList {
                 '}';
     }
 
+    /*
+     * addToBegining(int a) adds an int to the begining of the array
+     */
+
+    public int[] addToBeginning(int[] a, int b) {
+        int indexStartPos = 0;
+        int[] c = new int[a.length];
+        for(int i = 0; i < a.length; i++){
+            if(a[i] == 0){
+                indexStartPos++;
+            }
+        }
+
+        if(indexStartPos == 0) {
+          c = new int[a.length * 2];
+        }
+
+        c[a.length-1] = b;
+        for(int i = 0; i< a.length; i++){
+            c[a.length + i] = a[i];
+        }
+
+        System.out.println(Arrays.toString(c));
+
+        return c;
+    }
+
     public static void main(String[] args) {
         intArrayList ial = new intArrayList();
 
@@ -96,6 +127,10 @@ public class intArrayList {
         ial.add(25);
         ial.add(30);
         System.out.println(ial);
+
+        intArrayList a = new intArrayList();
+
+
 
     }
 }
