@@ -91,44 +91,21 @@ public class intArrayList {
     }
 
     /*
-     * addToBegining(int a) adds an int to the begining of the array
+     * addToBegining(int a) adds an int to the beginning of the array
      */
 
-    public int[] addToBeginning(int[] a, int b) {
-        int indexStartPos = 0;
-        int[] c = new int[a.length];
-        for(int i = 0; i < a.length; i++){
-            if(a[i] == 0){
-                indexStartPos++;
-            }
-        }
+    public int[] addToBeginning(int n) {
 
-        if(indexStartPos == 0) {
-          c = new int[a.length * 2];
-        }
-
-        c[a.length-1] = b;
-        for(int i = 0; i< a.length; i++){
-            c[a.length + i] = a[i];
-        }
-
-        System.out.println(Arrays.toString(c));
-
-        return c;
+        return a;
     }
 
     public static void main(String[] args) {
         intArrayList ial = new intArrayList();
 
-        ial.add(1);
-        ial.add(10);
-        ial.add(12);
-        ial.add(20);
-        ial.add(25);
-        ial.add(30);
+        ial.addToBeginning(1);
+
         System.out.println(ial);
 
-        intArrayList a = new intArrayList();
 
 
 
