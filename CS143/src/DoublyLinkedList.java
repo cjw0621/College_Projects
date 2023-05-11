@@ -1,5 +1,6 @@
+import java.util.Iterator;
 
-public class DoublyLinkedList {
+public class DoublyLinkedList implements Iterable<String>{
     /*
      * Inner Node class that represents one node
      * of a doubly linked list.
@@ -22,6 +23,51 @@ public class DoublyLinkedList {
             this.next = next;
         }
     }
+    /*
+     *Iterator class for iterating through the list in O(n) linear time
+     *
+     * methods:
+     * 1. next() returns the String in a particular node and move the iterator forwards to the next node
+     * 2. hasNext() returns true if the iterator has more nodes to iterate through
+     * (returns false if the iterator is at the end)
+     */
+    private static class Conductor implements Iterator<String>{
+
+        // current represents the node that the iterator
+        // is currently on in the iteration of the list
+        private Node current;
+
+        // constructor initializes the Iterator to start at a particular node
+
+        public Conductor(Node start){
+            current = start;
+        }
+
+        // Checking if the conductor is at the end of the train
+        @Override
+        public boolean hasNext(){
+            return current != null;
+        }
+         @Override
+        public String next(){
+            //1. save current's data
+             String data = current.data;
+             //2. move current forward to the next node in the lsit
+             current = current.next;
+             //3. return the data that's in current's previous location
+            return data;
+         }
+    }
+    // eventually this method will return an Iterator
+    // attached to this list that other classes can use
+    // to iterate the list in O(n) time
+    @Override
+    public Iterator<String> iterator() {
+
+        return new Conductor(head);
+    }
+
+    //=====Doubly linked list properties
 
     private Node head; // the first element in the list
     private Node tail; // the last element in the list
@@ -118,9 +164,20 @@ public class DoublyLinkedList {
             list.add("" + i);
         }
 
-        // print out all 1 million values in the list
-        for(int i = 0; i < list.size(); i++) {
-            list.get(i);
+
+//
+//        // print out all 1 million values in the list
+//        for(int i = 0; i < list.size(); i++) {
+//            list.get(i);
+//        }
+
+//        Iterator<String> iter = list.iterator();
+//        while(iter.hasNext()){
+//            System.out.println(iter.next());
+//        }
+
+        for(String s : list){
+            System.out.println(s);
         }
     }
 }
