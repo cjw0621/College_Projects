@@ -1,5 +1,7 @@
 package Assignment3;
 
+import java.util.Arrays;
+
 /*
  * Chase Whitney
  *
@@ -85,9 +87,7 @@ public class RecursionIntro {
             return i + 1;
         }
     }
-    public static int champion(boolean[] array){
-        return 0;
-    };
+
 
     /*
      * lp2lt(int n) returns int
@@ -102,18 +102,40 @@ public class RecursionIntro {
      * if n is 2 the answer is 1
      */
     public static int lp2lt(int n) {
-        if (n <= 2) {
+
+        int powerOfTwo = 2;
+        if (n <= powerOfTwo) {
             return 1;
         } else {
-            return 2 * lp2lt((n + 1) / 2);
+            return lp2lt((n + 1) / 2) * powerOfTwo;
+        }
+    }
+    public static int champion(boolean[] a) {
+        // Base case: only one participant
+        if (a.length == 1) {
+            return 0;
+        }
+
+        // Divide the participants into two halves
+        int firstHalfLength = Integer.highestOneBit(a.length);
+        boolean[] firstHalf = Arrays.copyOfRange(a, 0, firstHalfLength);
+        boolean[] secondHalf = Arrays.copyOfRange(a, firstHalfLength, a.length);
+
+        // Recursively determine the winner of each half
+        int firstHalfWinnerIndex = champion(firstHalf);
+        int secondHalfWinnerIndex = champion(secondHalf);
+
+        // Compare the winners of each half and return the index of the winner
+        if (a[firstHalfWinnerIndex] == a[secondHalfWinnerIndex]) {
+            return secondHalfWinnerIndex;
+        } else {
+            int overallWinnerIndex = (a[firstHalfWinnerIndex]) ? firstHalfWinnerIndex : secondHalfWinnerIndex;
+            return overallWinnerIndex;
         }
     }
 
+    public static void main(String[] args) {
 
-    
-
-
-
-
+    }
 
 }
