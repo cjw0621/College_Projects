@@ -1,7 +1,3 @@
-package Assignment3;
-
-import java.util.Arrays;
-
 /*
  * Chase Whitney
  *
@@ -19,9 +15,20 @@ public class RecursionIntro {
      * method increases all even digits in long n by 1 and decreases all odd digits in long n by 1
      */
     public static long eduodd(long n){
-       if(n == 0 || n == 1){
-           return 0;
-       }else {
+
+         if (n < 0) {
+                return -eduodd(-n);
+            }
+         else if(n < 10 ) {
+
+             if (n % 2 == 0) {
+                 return (n + 1) % 10;
+             } else {
+                 return (n - 1) % 10;
+             }
+         }
+
+       else {
            long lastDigit = n % 10; // saves the last digit of N into a variable lastDigit
            long remaining = n/10; // Saves the rest of the number minus the last digit into a variable remaining
 
@@ -65,7 +72,7 @@ public class RecursionIntro {
      */
 
     public static void printSparseTable(int start, int end) {
-        if(start < end){ // base case
+        if(start <= end){ // base case
             System.out.println(start + " " + fibby(start)); // prints table line by line
             printSparseTable(printSparseTable(start), end); // calls on helper method as a parameter  start
         }
@@ -110,32 +117,4 @@ public class RecursionIntro {
             return lp2lt((n + 1) / 2) * powerOfTwo;
         }
     }
-    public static int champion(boolean[] a) {
-        // Base case: only one participant
-        if (a.length == 1) {
-            return 0;
-        }
-
-        // Divide the participants into two halves
-        int firstHalfLength = Integer.highestOneBit(a.length);
-        boolean[] firstHalf = Arrays.copyOfRange(a, 0, firstHalfLength);
-        boolean[] secondHalf = Arrays.copyOfRange(a, firstHalfLength, a.length);
-
-        // Recursively determine the winner of each half
-        int firstHalfWinnerIndex = champion(firstHalf);
-        int secondHalfWinnerIndex = champion(secondHalf);
-
-        // Compare the winners of each half and return the index of the winner
-        if (a[firstHalfWinnerIndex] == a[secondHalfWinnerIndex]) {
-            return secondHalfWinnerIndex;
-        } else {
-            int overallWinnerIndex = (a[firstHalfWinnerIndex]) ? firstHalfWinnerIndex : secondHalfWinnerIndex;
-            return overallWinnerIndex;
-        }
-    }
-
-    public static void main(String[] args) {
-
-    }
-
 }

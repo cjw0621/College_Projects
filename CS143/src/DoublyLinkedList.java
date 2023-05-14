@@ -129,6 +129,47 @@ public class DoublyLinkedList implements Iterable<String>{
     }
 
     /*
+     * remove(int i) removes the data at position i from the doubly linked list
+     * return the data that was removed
+     *
+     * O(n) liner time
+     */
+    public String remove(int i){
+        // is "i" out of bounds?
+        if(i < 0 || i >= size) {
+            throw new IndexOutOfBoundsException();
+        }else {
+            Node walker = head;
+            // move walker forwards "i" times
+            for (int j = 0; j < i; j++) {
+                walker = walker.next;
+            }
+            if(head == tail){
+                head = tail = null;
+            }
+            // case 2: removing the head of the list
+            else if(walker == head){
+                // 1. move the head forwards
+                head = head.next;
+                //2. make nothing come before the new head
+                head.prev = null;
+            }else if(walker == tail){
+                //1. set tail.prev to head
+                tail = tail.prev;
+                //2. set tail.next to null to signify the end of the list
+                tail.next = null;
+            }else{
+                //1. The node after walker should be after the node before walker
+                (walker.prev).next = walker.next;
+                //2. The node before walker should be before the node after walker
+                (walker.next).prev = walker.prev;
+            }
+            size--;
+            return walker.data;
+        }
+    }
+
+    /*
      * get(int i) returns the ith String in the list
      * 		throws an IndexOutOfBoundsException if i is undefined
      *
