@@ -1,23 +1,23 @@
 import java.util.Iterator;
 
-public class DoublyLinkedList implements Iterable<String>{
+public class DoublyLinkedList<T> implements Iterable<T>{
     /*
      * Inner Node class that represents one node
      * of a doubly linked list.
      *
      * Each Node has 3 things
-     * 1. some data (a String)
+     * 1. some data (a T)
      * 2. a reference to the Node before this Node in the list
      * 3. a reference to the Node after this Node in the list
      */
-    private static class Node {
+    private static class Node<T> {
 
-        private Node prev; // a link to the previous node in the list
-        private String data;
-        private Node next; // a link to the next node in the list
+        private Node<T> prev; // a link to the previous node in the list
+        private T data;
+        private Node<T> next; // a link to the next node in the list
 
 
-        public Node(Node prev, String data, Node next) {
+        public Node(Node<T> prev, T data, Node<T> next) {
             this.prev = prev;
             this.data = data;
             this.next = next;
@@ -27,19 +27,19 @@ public class DoublyLinkedList implements Iterable<String>{
      *Iterator class for iterating through the list in O(n) linear time
      *
      * methods:
-     * 1. next() returns the String in a particular node and move the iterator forwards to the next node
+     * 1. next() returns the T in a particular node and move the iterator forwards to the next node
      * 2. hasNext() returns true if the iterator has more nodes to iterate through
      * (returns false if the iterator is at the end)
      */
-    private static class Conductor implements Iterator<String>{
+    private class Conductor implements Iterator<T>{
 
         // current represents the node that the iterator
         // is currently on in the iteration of the list
-        private Node current;
+        private Node<T> current;
 
         // constructor initializes the Iterator to start at a particular node
 
-        public Conductor(Node start){
+        public Conductor(Node<T> start){
             current = start;
         }
 
@@ -49,9 +49,9 @@ public class DoublyLinkedList implements Iterable<String>{
             return current != null;
         }
          @Override
-        public String next(){
+        public T next(){
             //1. save current's data
-             String data = current.data;
+             T data = current.data;
              //2. move current forward to the next node in the lsit
              current = current.next;
              //3. return the data that's in current's previous location
@@ -62,15 +62,15 @@ public class DoublyLinkedList implements Iterable<String>{
     // attached to this list that other classes can use
     // to iterate the list in O(n) time
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<T> iterator() {
 
         return new Conductor(head);
     }
 
     //=====Doubly linked list properties
 
-    private Node head; // the first element in the list
-    private Node tail; // the last element in the list
+    private Node<T> head; // the first element in the list
+    private Node<T> tail; // the last element in the list
     private int size; // how many elements are in the list
 
     /*
@@ -100,17 +100,17 @@ public class DoublyLinkedList implements Iterable<String>{
     }
 
     /*
-     * add(String e) adds the String e to the end of the list
+     * add(T e) adds the T e to the end of the list
      * 		e goes after the current tail
      * 		e becomes the tail
      *
      * O(1) constant time
      */
-    public void add(String e) {
+    public void add(T e) {
         // special case: if the list is empty, the head
         // and the tail should become the new node
         if(isEmpty()) {
-            Node newNode = new Node(null, e, null);
+            Node<T> newNode = new Node<>(null, e, null);
             head = tail = newNode;
         }
         else {
@@ -118,7 +118,7 @@ public class DoublyLinkedList implements Iterable<String>{
             // 		the current tail before it
             //		e inside of it
             //      nothing (null) after it
-            Node newNode = new Node(tail, e, null);
+            Node<T> newNode = new Node<>(tail, e, null);
             // 2. the new node should come after the current tail
             tail.next = newNode;
             // 3. the new node should become the tail
@@ -134,12 +134,12 @@ public class DoublyLinkedList implements Iterable<String>{
      *
      * O(n) liner time
      */
-    public String remove(int i){
+    public T remove(int i){
         // is "i" out of bounds?
         if(i < 0 || i >= size) {
             throw new IndexOutOfBoundsException();
         }else {
-            Node walker = head;
+            Node<T> walker = head;
             // move walker forwards "i" times
             for (int j = 0; j < i; j++) {
                 walker = walker.next;
@@ -170,18 +170,18 @@ public class DoublyLinkedList implements Iterable<String>{
     }
 
     /*
-     * get(int i) returns the ith String in the list
+     * get(int i) returns the ith T in the list
      * 		throws an IndexOutOfBoundsException if i is undefined
      *
      * O(n) linear time
      */
-    public String get(int i) {
+    public T get(int i) {
         // is "i" out of bounds?
         if(i < 0 || i >= size) {
             throw new IndexOutOfBoundsException();
         }
         // start at the head of the list
-        Node walker = head;
+        Node<T> walker = head;
         // move walker forwards "i" times
         for(int j = 0; j < i; j++) {
             walker = walker.next;
@@ -200,9 +200,28 @@ public class DoublyLinkedList implements Iterable<String>{
 //
 //		System.out.println(list.get(2));
 
-        DoublyLinkedList list = new DoublyLinkedList();
+        DoublyLinkedList<String> list = new DoublyLinkedList<>();
         for(int i = 0; i < 1_000_000; i++) {
             list.add("" + i);
+        }
+
+        DoublyLinkedList<Integer> list2 = new DoublyLinkedList<>();
+        for(int i = 0; i <= 100; i++){
+            list2.add(i + (i * 2));
+        }
+
+        DoublyLinkedList<Double> list3 = new DoublyLinkedList<>();
+        for(int i = 0; i <= 100; i++){
+            list3.add(i+.02 + i + 2.032);
+        }
+
+        DoublyLinkedList<Boolean> list4 = new DoublyLinkedList<>();
+        for(int i = 0; i < 100; i++){
+            if(Math.ceil(i/9.0)==.0+i){
+                list4.add(true);
+            }else{
+                list4.add(false);
+            }
         }
 
 
@@ -212,12 +231,24 @@ public class DoublyLinkedList implements Iterable<String>{
 //            list.get(i);
 //        }
 
-//        Iterator<String> iter = list.iterator();
+//        Iterator<T> iter = list.iterator();
 //        while(iter.hasNext()){
 //            System.out.println(iter.next());
 //        }
 
         for(String s : list){
+            System.out.println(s);
+        }
+
+        for(Integer s : list2){
+            System.out.println(s);
+        }
+
+        for(Double s : list3){
+            System.out.println(s);
+        }
+
+        for(Boolean s : list4){
             System.out.println(s);
         }
     }
