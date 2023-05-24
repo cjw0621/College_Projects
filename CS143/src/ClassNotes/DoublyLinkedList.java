@@ -253,6 +253,19 @@ public class DoublyLinkedList<T> implements Iterable<T>{
         for(Boolean s : list4){
             System.out.println(s);
         }
+
+        DoublyLinkedList<String> sList = new DoublyLinkedList<>();
+
+
+        sList.add("Chuck");
+        sList.add("maeziquence");
+        sList.add("water Bottle");
+        System.out.println(sList.remove(0));
+
+        for(String s : sList){
+            System.out.println(s);
+        }
     }
+
 }
 
