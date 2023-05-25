@@ -121,7 +121,25 @@ public class RecursionIntro {
     }
 
     public static int champion(boolean[] a) {
-        return championHelper(a, 0, a.length - 1);
+        if (a.length == 1) {
+            return 0;
+        } else if (a.length == 2) {
+            if (a[0] != a[1]) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else if(a.length % 2 == 1){
+            boolean endValue = a[a.length - 1];
+            if(a[0] != a[1]){
+                return championHelper(a, 0, 1);
+            } else {
+                return 1;
+            }
+
+        }else {
+            return championHelper(a, 0, a.length - 1);
+        }
     }
 
     private static int championHelper(boolean[] a, int start, int end) {

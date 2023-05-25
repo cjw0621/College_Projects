@@ -64,26 +64,11 @@ public class DLList<T> implements Iterable<T> {
 		}
 	}
 
-	private static class reverse<T> implements Iterator<T> {
+	private static class BackwardsConductor<T> implements Iterator<T> {
 		private Node<T> car;
 
-		public reverse(DLList<T> list) {
-			if (list.head == null || list.head.next == null) {
-				return; // Empty list or single node, nothing to reverse
-			}
-
-			Node<T> previous = null;
-			Node<T> current = list.head;
-			Node<T> next;
-
-			while (current != null) {
-				next = current.next;
-				current.next = previous;
-				previous = current;
-				current = next;
-			}
-
-			list.head = previous;
+		public BackwardsConductor(DLList<T> list){
+			car = list.tail;
 		}
 
 		public boolean hasNext() {
@@ -133,16 +118,16 @@ public class DLList<T> implements Iterable<T> {
 	 */
 	public boolean add(int i, T data) {
 
-		if (i > this.size || i < 0) {
+		if (i >= this.size || i < 0) {
 			return false;
 		}
-		size++;
 
 		Node<T> newNode = new Node<>(null, data,null);
 
-		if (i == 0) {
+		if (i == 0 ) {
 
 			newNode.next = head;
+			head.prev = newNode;
 			head = newNode;
 
 		} else {
@@ -150,14 +135,15 @@ public class DLList<T> implements Iterable<T> {
 			for (int j = 0; j < i - 1; j++) {
 				current = current.next;
 			}
+
+			newNode.prev = current;
 			newNode.next = current.next;
 			current.next = newNode;
+			newNode.next.prev = newNode;
+
 		}
 
-		if(i == size){
-			tail.next = new Node<>(newNode.prev, data, newNode.next);
-			tail = tail.next;
-		}
+		size++;
 		return true;
 	}
 
@@ -170,31 +156,27 @@ public class DLList<T> implements Iterable<T> {
 	 * @throws IndexOutOfBoundsException if i is invalid
 	 */
 	public T get(int i) {
-		if (i < 0) {
+		if (i < 0 || i >= size) {
 			throw new IndexOutOfBoundsException();
 		}
 		Node<T> current = head;
 
 		if(i >= this.size/2) {
 			current = tail;
-			for (int j = size-1; current != null && j > i; j--) {
+			for (int j = size-1; j > i; j--) {
 				// Count our way down to desired element
 				current = current.prev;
 			}
 		} else{
 
-			for(int j = 0; current != null && j < i; j++){
+			for(int j = 0;j < i; j++){
 				// Count our way up to desired element
 				current = current.next;
 			}
-			if (current == null) {
-				throw new IndexOutOfBoundsException();
-			}
-		}
-		if (current == null) {
-			throw new IndexOutOfBoundsException();
 		}
 		return current.data;
+
+
 	}
 
 	/**
@@ -264,7 +246,7 @@ public class DLList<T> implements Iterable<T> {
 
 
 	public Iterator<T> descendingIterator() {
-		return new reverse<T>(this);
+		return new BackwardsConductor<>(this);
 	}
 
 	/**
@@ -282,14 +264,9 @@ public class DLList<T> implements Iterable<T> {
 	 */
 	public void reverse() {
 
-		if (head == null || head.next == null) {
-			// Empty list or list with only one element
-			return;
-		}
-
 		Node<T> previous = null;
 		Node<T> current = head;
-		Node<T> next = null;
+		Node<T> next;
 
 		while (current != null) {
 			// Store the next node
@@ -299,33 +276,14 @@ public class DLList<T> implements Iterable<T> {
 			current.next = previous;
 
 			// Move previous and current one step forward
+
+			current.prev = next;
 			previous = current;
 			current = next;
+
 		}
-
-		// Update the head to point to the new start of the reversed list
-		head = previous;
-
+		Node<T> oldHead = head;
+		head = tail;
+		tail = oldHead;
 	}
-
-
-	public static void main(String[] args) {
-
-		DLList<Integer> list = new DLList<>();
-		list.add(1);
-		list.add(2);
-		list.add(3);
-
-
-		list.reverse();
-		for(Integer i : list){
-			System.out.println(i);
-		}
-
-		for(int i = 0; i <= list.size(); i++){
-			System.out.println(list.get(i));
-		}
-	}
-
-
 }
