@@ -119,4 +119,26 @@ public class RecursionIntro {
             return lp2lt((n + 1) / 2) * powerOfTwo;
         }
     }
+
+    public static int champion(boolean[] a) {
+        return championHelper(a, 0, a.length - 1);
+    }
+
+    private static int championHelper(boolean[] a, int start, int end) {
+        if (start == end) {
+            return start;  // Base case: Only one participant remains, return its index
+        }
+
+        int mid = start + lp2lt(end - start + 1) / 2;  // Calculate the midpoint of the range
+
+        int leftWinner = championHelper(a, start, mid);  // Recurse on the left half
+        int rightWinner = championHelper(a, mid + 1, end);  // Recurse on the right half
+
+        // Determine the winner based on the values at the left and right indices
+        if (a[leftWinner] != a[rightWinner]) {
+            return a[leftWinner] ? leftWinner : rightWinner;
+        } else {
+            return rightWinner;  // If both values are the same, the right participant wins
+        }
+    }
 }

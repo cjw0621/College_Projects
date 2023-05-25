@@ -1,6 +1,7 @@
 package Assignment4;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * A class representing a doubly linked list.
@@ -14,6 +15,11 @@ import java.util.Iterator;
  * STUDENTS FOR NONPROFIT EDUCATIONAL PURPOSES.
  */
 public class DLList<T> implements Iterable<T> {
+	// head is beginning node (no prev), tail is end node (no next)
+	// They can both reference the same node if the list is one element long
+	// The can both reference null if the list is empty
+	public Node<T> head, tail;
+	private int size; // how many elements are in the list
 
 	private static class Node<T> {
 		// prev is reference to adjacent node closer to head (or null if this node is
@@ -32,11 +38,7 @@ public class DLList<T> implements Iterable<T> {
 		}
 	}
 
-	// head is beginning node (no prev), tail is end node (no next)
-	// They can both reference the same node if the list is one element long
-	// The can both reference null if the list is empty
-	private Node<T> head, tail;
-	private int size; // how many elements are in the list
+
 
 	/**
 	 * Forward iterator class (conductor).
@@ -53,6 +55,9 @@ public class DLList<T> implements Iterable<T> {
 		}
 
 		public T next() {
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			T data = car.data; // Remember current
 			car = car.next; // Advance to after car
 			return data; // Return old car data
@@ -60,10 +65,25 @@ public class DLList<T> implements Iterable<T> {
 	}
 
 	private static class reverse<T> implements Iterator<T> {
-		public Node<T> car;
+		private Node<T> car;
 
 		public reverse(DLList<T> list) {
-			car = list.tail;// Begin at the end of the list
+			if (list.head == null || list.head.next == null) {
+				return; // Empty list or single node, nothing to reverse
+			}
+
+			Node<T> previous = null;
+			Node<T> current = list.head;
+			Node<T> next;
+
+			while (current != null) {
+				next = current.next;
+				current.next = previous;
+				previous = current;
+				current = next;
+			}
+
+			list.head = previous;
 		}
 
 		public boolean hasNext() {
@@ -71,11 +91,15 @@ public class DLList<T> implements Iterable<T> {
 		}
 
 		public T next() {
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
 			T data = car.data;
 			car = car.prev; // Advance to the prior car
 			return data;// return old car data
 		}
 	}
+
 
 
 	public DLList() {
@@ -112,8 +136,9 @@ public class DLList<T> implements Iterable<T> {
 		if (i > this.size || i < 0) {
 			return false;
 		}
+		size++;
 
-		Node<T> newNode = new Node<>(tail, data, head);
+		Node<T> newNode = new Node<>(null, data,null);
 
 		if (i == 0) {
 
@@ -130,10 +155,9 @@ public class DLList<T> implements Iterable<T> {
 		}
 
 		if(i == size){
-			tail.next = new Node<>(tail, data, null);
+			tail.next = new Node<>(newNode.prev, data, newNode.next);
 			tail = tail.next;
 		}
-		size++;
 		return true;
 	}
 
@@ -153,12 +177,9 @@ public class DLList<T> implements Iterable<T> {
 
 		if(i >= this.size/2) {
 			current = tail;
-			for (int j = size; current != null && j > i; j--) {
+			for (int j = size-1; current != null && j > i; j--) {
 				// Count our way down to desired element
 				current = current.prev;
-			}
-			if (current == null) {
-				throw new IndexOutOfBoundsException();
 			}
 		} else{
 
@@ -166,8 +187,9 @@ public class DLList<T> implements Iterable<T> {
 				// Count our way up to desired element
 				current = current.next;
 			}
-
-
+			if (current == null) {
+				throw new IndexOutOfBoundsException();
+			}
 		}
 		if (current == null) {
 			throw new IndexOutOfBoundsException();
@@ -236,9 +258,10 @@ public class DLList<T> implements Iterable<T> {
 
 	/**
 	 * Create a reverse iterator for this list.
-	 * 
+	 *
 	 * @return iterator that walks from tail to head
 	 */
+
 
 	public Iterator<T> descendingIterator() {
 		return new reverse<T>(this);
@@ -258,77 +281,51 @@ public class DLList<T> implements Iterable<T> {
 	 * list going A <-> B <-> C <-> D would now go D <-> C <-> B <-> A.
 	 */
 	public void reverse() {
-		for (Iterator<T> it = this.descendingIterator(); it.hasNext(); ) {
-			T i = it.next();
-			System.out.println(i);
+
+		if (head == null || head.next == null) {
+			// Empty list or list with only one element
+			return;
 		}
+
+		Node<T> previous = null;
+		Node<T> current = head;
+		Node<T> next = null;
+
+		while (current != null) {
+			// Store the next node
+			next = current.next;
+
+			// Reverse the link
+			current.next = previous;
+
+			// Move previous and current one step forward
+			previous = current;
+			current = next;
+		}
+
+		// Update the head to point to the new start of the reversed list
+		head = previous;
 
 	}
 
 
 	public static void main(String[] args) {
 
-		DLList<String> sList = new DLList<>();
+		DLList<Integer> list = new DLList<>();
+		list.add(1);
+		list.add(2);
+		list.add(3);
 
 
-		sList.add("Chuck");
-		sList.add("maeziquence");
-		sList.add("water Bottle");
-		System.out.println(sList.size());
-
-		for(String i : sList){
+		list.reverse();
+		for(Integer i : list){
 			System.out.println(i);
 		}
 
-		DLList<Integer> nList = new DLList<>();
-		for(int i = 0; i < 1_000_000; i++){
-			nList.add(i);
+		for(int i = 0; i <= list.size(); i++){
+			System.out.println(list.get(i));
 		}
-
-
-		double begining = (double) (System.currentTimeMillis());
-		nList.get(1);
-	    double end = (double) (System.currentTimeMillis());
-
-		System.out.println("Total Time get last element: " + (end - begining));
-
-	    begining = (double) (System.currentTimeMillis());
-		nList.get(1_000_000);
-		end = (double) (System.currentTimeMillis());
-
-
-
-		System.out.println("Total Time get first element: " + (end - begining));
-
-		begining = (double) (System.currentTimeMillis());
-		nList.get(500_000);
-		end = (double) (System.currentTimeMillis());
-
-		System.out.println("Total Time get element half way: " + (end - begining));
-
-		begining = (double) (System.currentTimeMillis());
-		System.out.println(nList.size());
-		end = (double) (System.currentTimeMillis());
-
-		System.out.println("Total Time size: " + (end - begining));
-		sList.add(2, "Markus");
-		sList.add(2, "Rufus");
-		sList.add(0, "Chase");
-		sList.add("Mark");
-		for(String i : sList){
-			System.out.println(i);
-		}
-		System.out.println(sList.size());
-		System.out.println(" ");
-
-
-		sList.remove(1);
-		for(String i : sList){
-			System.out.println(i);
-		}
-
-		System.out.println(sList.size());
-
-
 	}
+
+
 }
