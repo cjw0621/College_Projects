@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 
 /**
  * A class representing a doubly linked list.
- * 
  * Chase Whitney
  * 
  * PLEASE DO NOT COPY THIS FILE TO OTHER STUDENTS OR TO WEBSITES LIKE CHEGG,
@@ -19,7 +18,10 @@ public class DLList<T> implements Iterable<T> {
 	// They can both reference the same node if the list is one element long
 	// The can both reference null if the list is empty
 	public Node<T> head, tail;
-	private int size; // how many elements are in the list
+
+	// how many elements are in the list
+	// O(1)
+	private int size;
 
 	private static class Node<T> {
 		// prev is reference to adjacent node closer to head (or null if this node is
@@ -64,6 +66,10 @@ public class DLList<T> implements Iterable<T> {
 		}
 	}
 
+	/**
+	 * Backwards iterator class (BackwardsConductor)
+	 */
+
 	private static class BackwardsConductor<T> implements Iterator<T> {
 		private Node<T> car;
 
@@ -86,7 +92,9 @@ public class DLList<T> implements Iterable<T> {
 	}
 
 
-
+	/**
+	 * Constructor for Class DLLIst
+	 */
 	public DLList() {
 		head = tail = null; // Empty list
 		size = 0; // Sets size to 0 when a new list is created
@@ -163,20 +171,19 @@ public class DLList<T> implements Iterable<T> {
 
 		if(i >= this.size/2) {
 			current = tail;
-			for (int j = size-1; j > i; j--) {
+			for (int j = size - 1; j > i; j--) {
 				// Count our way down to desired element
 				current = current.prev;
 			}
 		} else{
 
-			for(int j = 0;j < i; j++){
+			for(int j = 0; j < i; j++){
 				// Count our way up to desired element
 				current = current.next;
 			}
 		}
+
 		return current.data;
-
-
 	}
 
 	/**
@@ -234,7 +241,7 @@ public class DLList<T> implements Iterable<T> {
 		// .next() is called, the Conductor
 		// produces one more piece of data,
 		// starting with head and ending with tail
-		return new Conductor<T>(this);
+		return new Conductor<>(this);
 	}
 
 
@@ -255,6 +262,7 @@ public class DLList<T> implements Iterable<T> {
 	 * @return number of nodes
 	 */
 	public int size() {
+
 		return this.size;
 	}
 
@@ -269,19 +277,20 @@ public class DLList<T> implements Iterable<T> {
 		Node<T> next;
 
 		while (current != null) {
+
 			// Store the next node
 			next = current.next;
 
-			// Reverse the link
+			// Reverses the link
 			current.next = previous;
 
-			// Move previous and current one step forward
-
+			// Move previous and current one step forward sets the current.previous as current.next
 			current.prev = next;
 			previous = current;
 			current = next;
 
 		}
+		//swaps the head and tail position
 		Node<T> oldHead = head;
 		head = tail;
 		tail = oldHead;
