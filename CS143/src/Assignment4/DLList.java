@@ -291,8 +291,8 @@ public class DLList<T> implements Iterable<T> {
 
 		}
 		//swaps the head and tail position
-		Node<T> oldHead = head;
+		current = head;
 		head = tail;
-		tail = oldHead;
+		tail = current;
 	}
 }
